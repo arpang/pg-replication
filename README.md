@@ -13,3 +13,6 @@ PG commands:
 - Check wal level: `SHOW wal_level;`
 - Create publication: `CREATE PUBLICATION my_publication FOR TABLE emp_id;`
 - Create subscription: `CREATE SUBSCRIPTION my_subscription CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
+- Check publications (in publisher): `select * from pg_publication;`
+- Check subscriptions (in subscriber): `select * from pg_subscription;`
+- Check replication slots (in publisher): `SELECT * FROM pg_replication_slots;`
