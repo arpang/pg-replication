@@ -16,3 +16,20 @@ PG commands:
 - Check publications (in publisher): `select * from pg_publication;`
 - Check subscriptions (in subscriber): `select * from pg_subscription;`
 - Check replication slots (in publisher): `SELECT * FROM pg_replication_slots;`
+
+
+Steps for one publisher and two subscriber replication:
+- Start the containers, it will spin up three PG instances namely `pub`, `sub1` and `sub2` at ports 5432, 5433 and 5434 respectively.
+- Verify that the wal_level is set to `logical` (by running `SHOW wal_level;`) in each of the PG instances.
+- Verify that `emp_id` table exist in each of the instances. Table in `pub` instance should contain 10K rows and should be empty in the other two.
+- Create a publication in `pub` instance: 
+
+    `CREATE PUBLICATION my_publication FOR TABLE emp_id;`
+
+- Create subcriptions in `sub1` and `sub2` instances:
+
+`CREATE SUBSCRIPTION my_subscription1 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
+
+`CREATE SUBSCRIPTION my_subscription2 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
+
+- You should see table `empd_id` getting replicated from `pub` to `sub1` and `sub2`.
