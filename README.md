@@ -1,4 +1,5 @@
 Send an email to IT with your docker hub username to add to you to docker's paid subscription
+
 Install docker desktop: https://docs.docker.com/desktop/mac/install/
 
 Docker commands:
