@@ -28,8 +28,8 @@ Steps to setup one publisher and two subscribers replication:
 
 - Create subcriptions in `sub1` and `sub2` instances:
 
-`CREATE SUBSCRIPTION my_subscription1 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
+    `CREATE SUBSCRIPTION my_subscription1 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
 
-`CREATE SUBSCRIPTION my_subscription2 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
+    `CREATE SUBSCRIPTION my_subscription2 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;`
 
 - You should see table `empd_id` getting replicated from `pub` to `sub1` and `sub2`.
