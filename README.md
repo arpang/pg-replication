@@ -1,4 +1,4 @@
-Send an email to IT with your docker hub username to add to you to docker's paid subscription
+Send an email to IT with your docker hub username to add you to docker's paid subscription
 
 Install docker desktop: https://docs.docker.com/desktop/mac/install/
 
@@ -18,7 +18,7 @@ PG commands:
 - Check replication slots (in publisher): `SELECT * FROM pg_replication_slots;`
 
 
-Steps for one publisher and two subscriber replication:
+Steps to setup one publisher and two subscribers replication:
 - Start the containers, it will spin up three PG instances namely `pub`, `sub1` and `sub2` at ports 5432, 5433 and 5434 respectively.
 - Verify that the wal_level is set to `logical` (by running `SHOW wal_level;`) in each of the PG instances.
 - Verify that `emp_id` table exist in each of the instances. Table in `pub` instance should contain 10K rows and should be empty in the other two.
