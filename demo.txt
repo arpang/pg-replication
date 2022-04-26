@@ -1,0 +1,61 @@
+1. Basic logical replication: 1 pub, 2 subs
+ - set wal_level to logical
+ - create publications and subcriptions 
+ - starts with snapshot replication, subsequent updates are replicated in real time
+ - replication slot in publisher
+ - processes
+
+
+ 2. Scenarios 
+ - lagging subscriber
+ - killed walsender process
+ 
+ 3. Cannot replicate schema changes
+
+
+
+
+Handy commands:
+psql -U postgres
+SHOW wal_level;
+select count(*) from emp_id;
+CREATE PUBLICATION my_publication FOR TABLE emp_id;
+CREATE SUBSCRIPTION my_subscription1 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;
+CREATE SUBSCRIPTION my_subscription2 CONNECTION 'host=host.docker.internal port=5432 dbname=postgres password=postgres user=postgres' PUBLICATION my_publication;
+
+insert into emp_id values (10001), (10002);
+select * from emp_id limit 10;
+update emp_id set id = 10003 where id = 1;
+select * from emp_id limit 10;
+delete from emp_id where id = 2;
+
+
+SELECT * FROM pg_replication_slots;
+
+INSERT INTO emp_id (id) SELECT g.id FROM generate_series(10004, 20000) AS g (id);
+
+
+alter table emp_id add column age int;
+
+INSERT INTO emp_id (id, age) values (30001, 50);
+
+
+CREATE PUBLICATION my_publication2 FOR TABLE org_id;
+CREATE SUBSCRIPTION my_subscription3 CONNECTION 'host=host.docker.internal port=5433 dbname=demo password=postgres user=postgres' PUBLICATION my_publication2;
+CREATE SUBSCRIPTION my_subscription4 CONNECTION 'host=host.docker.internal port=5433 dbname=demo password=postgres user=postgres' PUBLICATION my_publication2;
+
+
+
+Query decoded WAL:
+SELECT * FROM pg_create_logical_replication_slot('test', 'test_decoding', false, true);
+Run some DML command.
+SELECT * FROM pg_logical_slot_get_changes('test', NULL, NULL);
+
+
+Stream decoded WAL:
+pg_recvlogical -d postgres --slot=test2 --create-slot -U postgres
+pg_recvlogical -d postgres --slot=test2 -U postgres --start -f -
+
+To drop 
+select pg_drop_replication_slot('test');
+select pg_drop_replication_slot('test2');
